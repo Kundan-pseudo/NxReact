@@ -1,0 +1,108 @@
+{
+  "name": "content-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/content-ui/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/content-ui",
+        "index": "apps/content-ui/src/index.html",
+        "baseHref": "/",
+        "main": "apps/content-ui/src/main.ts",
+        "tsConfig": "apps/content-ui/tsconfig.app.json",
+        "assets": [
+          "apps/content-ui/src/favicon.ico",
+          "apps/content-ui/src/assets"
+        ],
+        "styles": [],
+        "scripts": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/content-ui/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/content-ui/src/environments/environment.ts",
+              "with": "apps/content-ui/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/content-ui/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "content-ui:build",
+        "hmr": true,
+        "port": 4203
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "content-ui:build:development"
+        },
+        "production": {
+          "buildTarget": "content-ui:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/content-ui/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/content-ui/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "content-ui:build",
+        "port": 4203
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "content-ui:build:development"
+        },
+        "production": {
+          "buildTarget": "content-ui:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
